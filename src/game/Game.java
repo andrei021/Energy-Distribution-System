@@ -7,6 +7,10 @@ import players.Consumer;
 import players.Distributor;
 import players.Player;
 import players.Producer;
+import strategies.GreenStrategy;
+import strategies.PriceStrategy;
+import strategies.QuantityStrategy;
+import strategies.Strategy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +22,9 @@ public final class Game {
     private final List<Distributor> distributors;
     private final List<Producer> producers;
     private final List<MonthUpdate> updates;
+    private final Strategy greenStrategy;
+    private final Strategy priceStrategy;
+    private final Strategy quantityStrategy;
     private static int numOfDistributorsInGame;
 
     public Game(final int numOfTurns, final List<Consumer> consumers,
@@ -28,6 +35,9 @@ public final class Game {
         this.distributors = distributors;
         this.producers = producers;
         this.updates = updates;
+        this.greenStrategy = new GreenStrategy(this.producers);
+        this.priceStrategy = new PriceStrategy(this.producers);
+        this.quantityStrategy = new QuantityStrategy(this.producers);
         setNumOfDistributorsInGame(distributors.size());
     }
 
@@ -55,6 +65,20 @@ public final class Game {
         }
     }
 
+    private void chooseProducers(final List<Distributor> distributors) {
+        for (Distributor distributor : distributors) {
+            if (distributor.hasToChooseProducers()) {
+                if (distributor.getStrategy().equals("GREEN")) {
+                    this.greenStrategy.chooseProducers(distributor);
+                } else if (distributor.getStrategy().equals("PRICE")) {
+                    this.priceStrategy.chooseProducers(distributor);
+                } else {
+                    this.quantityStrategy.chooseProducers(distributor);
+                }
+            }
+        }
+    }
+
     private void calculateContractsPrice(final List<Distributor> distributorsList) {
         for (Distributor distributor : distributorsList) {
             if (!distributor.isBankrupt()) {
@@ -73,6 +97,24 @@ public final class Game {
                 distributor.updateCost(cost);
             }
         }
+
+        for (Cost cost : month.getNewProducerEnergyCosts()) {
+            Producer producer = getProducerAfterId(cost.getId());
+
+            if (producer != null) {
+                producer.updateCost(cost);
+            }
+        }
+    }
+
+    private Producer getProducerAfterId(final int id) {
+        for (Producer producer : this.producers) {
+            if (producer.getId() == id) {
+                return producer;
+            }
+        }
+
+        return null;
     }
 
     private Distributor getDistributorAfterId(final int id) {
@@ -134,7 +176,7 @@ public final class Game {
 
     private void playRound() {
         payPlayers(this.consumers);
-        // TODO choose producers
+        chooseProducers(this.distributors);
         calculateContractsPrice(this.distributors);
         signBestContracts(this.consumers);
         payTaxes(this.consumers);

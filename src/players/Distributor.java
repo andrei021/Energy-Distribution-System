@@ -6,31 +6,59 @@ import game.Game;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
-public final class Distributor extends Player {
+public final class Distributor extends Player implements Observer {
 
     private int price;
     private Cost cost;
     private List<Contract> contracts;
     private int contractLength;
     private final int energyNeededKW;
+    private int currentEnergy;
     private final String producerStrategy;
-    private boolean hasToChooseProducer;
+    private boolean hasToChooseProducers;
 
     public Distributor(final int id, final int budget, final int contractLength,
                        final Cost cost, final int energyNeededKW, final String producerStrategy) {
         super(id, budget);
         this.price = 0;
         this.cost = cost;
+        this.cost.setProductionCost(0);
         this.contractLength = contractLength;
         this.contracts = new ArrayList<>();
         this.energyNeededKW = energyNeededKW;
+        this.currentEnergy = 0;
         this.producerStrategy = producerStrategy;
-        this.hasToChooseProducer = true;
+        this.hasToChooseProducers = true;
     }
 
     private int calculateProfit() {
         return (int) Math.round(Math.floor(0.2 * this.cost.getProductionCost()));
+    }
+
+    public void addProducer(Producer producer) {
+        this.currentEnergy += producer.getEnergyPerDistributor();
+        this.cost.addToProductionCost(
+                (int) (producer.getEnergyPerDistributor() * producer.getPriceKW()));
+        producer.addObserver(this);
+    }
+
+    public boolean hasEnoughEnergy() {
+        if (currentEnergy >= energyNeededKW) {
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        o.deleteObserver(this);
+        this.cost.setProductionCost(0);
+        this.currentEnergy = 0;
+        this.hasToChooseProducers = true;
     }
 
     @Override
@@ -68,7 +96,8 @@ public final class Distributor extends Player {
             return;
         }
 
-        // TODO calculate production cost
+        this.cost.setProductionCost(
+                (int) Math.round(Math.floor((this.cost.getProductionCost() / 10))));
 
         if (this.contracts.isEmpty()) {
             this.price = this.cost.getTotalCost() + calculateProfit();
@@ -122,7 +151,21 @@ public final class Distributor extends Player {
         return energyNeededKW;
     }
 
-    public String getProducerStrategy() {
+    public String getStrategy() {
         return producerStrategy;
     }
+
+    public int getCurrentEnergy() {
+        return currentEnergy;
+    }
+
+    public boolean hasToChooseProducers() {
+        return hasToChooseProducers;
+    }
+
+    public void setHasToChooseProducers(boolean hasToChooseProducers) {
+        this.hasToChooseProducers = hasToChooseProducers;
+    }
+
+
 }

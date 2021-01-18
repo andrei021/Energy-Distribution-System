@@ -1,24 +1,37 @@
 package players;
 
-import java.util.ArrayList;
-import java.util.List;
+import game.Cost;
 
 public final class Producer extends Player {
 
     private final String energyType;
     private final int maxDistributors;
     private double priceKW;
-    private int energyPerDistributors;
-    private List<Distributor> distributors;
+    private int energyPerDistributor;
 
     public Producer(final int id, final String energyType, final int maxDistributors,
-                    final double priceKW, final int energyPerDistributors) {
+                    final double priceKW, final int energyPerDistributor) {
         super(id, 0);
         this.energyType = energyType;
         this.maxDistributors = maxDistributors;
         this.priceKW = priceKW;
-        this.energyPerDistributors = energyPerDistributors;
-        this.distributors = new ArrayList<>();
+        this.energyPerDistributor = energyPerDistributor;
+    }
+
+    public boolean hasVacantPlace() {
+        if (maxDistributors - countObservers() > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean isGreen() {
+        if (energyType.equals("COAL") || energyType.equals("NUCLEAR")) {
+            return false;
+        }
+
+        return true;
     }
 
     @Override
@@ -28,6 +41,12 @@ public final class Producer extends Player {
     @Override
     public int calculateIncome() {
         return 0;
+    }
+
+    public void updateCost(final Cost newCost) {
+        this.energyPerDistributor = newCost.getInfrastructureCost();
+        setChanged();
+        notifyObservers();
     }
 
     public String getEnergyType() {
@@ -42,11 +61,11 @@ public final class Producer extends Player {
         return priceKW;
     }
 
-    public int getEnergyPerDistributors() {
-        return energyPerDistributors;
+    public int getEnergyPerDistributor() {
+        return energyPerDistributor;
     }
 
-    public void setEnergyPerDistributors(final int energyPerDistributors) {
-        this.energyPerDistributors = energyPerDistributors;
+    public void setEnergyPerDistributor(final int energyPerDistributor) {
+        this.energyPerDistributor = energyPerDistributor;
     }
 }

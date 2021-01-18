@@ -34,4 +34,8 @@ public final class Cost {
     public void setProductionCost(int productionCost) {
         this.productionCost = productionCost;
     }
+
+    public void addToProductionCost(int amount) {
+        this.productionCost += amount;
+    }
 }

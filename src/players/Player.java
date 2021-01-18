@@ -1,6 +1,8 @@
 package players;
 
-public abstract class Player {
+import java.util.Observable;
+
+public abstract class Player extends Observable {
 
     private final int id;
     private boolean isBankrupt;
