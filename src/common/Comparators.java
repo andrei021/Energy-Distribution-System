@@ -18,9 +18,9 @@ public final class Comparators {
     private static final Comparator<Producer> GREEN = (o1, o2) -> {
 
         if (o1.isGreen() && !o2.isGreen()) {
-            return 1;
+            return -1;
         } else if (o2.isGreen() && !o1.isGreen()) {
-            return  -1;
+            return  1;
         }
 
         if (o1.getPriceKW() > o2.getPriceKW()) {
@@ -37,7 +37,7 @@ public final class Comparators {
 
         if (o1.getId() > o2.getId()) {
             return 1;
-        } else if (o1.getId() < o2.getId()){
+        } else if (o1.getId() < o2.getId()) {
             return -1;
         }
 
@@ -60,7 +60,7 @@ public final class Comparators {
 
         if (o1.getId() > o2.getId()) {
             return 1;
-        } else if (o1.getId() < o2.getId()){
+        } else if (o1.getId() < o2.getId()) {
             return -1;
         }
 
@@ -77,7 +77,7 @@ public final class Comparators {
 
         if (o1.getId() > o2.getId()) {
             return 1;
-        } else if (o1.getId() < o2.getId()){
+        } else if (o1.getId() < o2.getId()) {
             return -1;
         }
 

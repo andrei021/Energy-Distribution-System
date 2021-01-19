@@ -53,8 +53,4 @@ public final class DistributorToWrite {
     public String getProducerStrategy() {
         return producerStrategy;
     }
-
-    public boolean isBankrupt() {
-        return isBankrupt;
-    }
 }

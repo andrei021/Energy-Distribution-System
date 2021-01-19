@@ -11,17 +11,17 @@ public final class QuantityStrategy extends EnergyStrategy {
 
     public QuantityStrategy(final String name, final List<Producer> producers) {
         super(name, producers);
-
-        Collections.sort(
-                super.getProducers(),
-                Comparators.getInstance().getQUANTITY());
     }
 
     @Override
     public void chooseProducers(final Distributor distributor) {
+
+        Collections.sort(
+                super.getProducers(),
+                Comparators.getInstance().getQUANTITY());
+
         for (Producer currentProducer : super.getProducers()) {
             if (distributor.hasEnoughEnergy()) {
-                distributor.setHasToChooseProducers(false);
                 return;
             }
 

@@ -67,19 +67,24 @@ public final class Game {
     }
 
     private void chooseProducers(final List<Distributor> distributors) {
-        for (Producer producer : this.producers) {
-            producer.addNewMonth();
-        }
 
         for (Distributor distributor : distributors) {
             if (!distributor.isBankrupt() && distributor.hasToChooseProducers()) {
+
+                distributor.clearProducers();
+
                 distributor.chooseProducers(this.greenStrategy);
                 distributor.chooseProducers(this.priceStrategy);
                 distributor.chooseProducers(this.quantityStrategy);
+
+                distributor.updatePorudctionCost();
             }
         }
+    }
 
+    private void makeProducersMonthStats(final List<Producer> producers) {
         for (Producer producer : this.producers) {
+            producer.addNewMonth();
             producer.makeMonthStats();
         }
     }
@@ -102,7 +107,9 @@ public final class Game {
                 distributor.updateCost(cost);
             }
         }
+    }
 
+    private void updateProducers(final MonthUpdate month) {
         for (Cost cost : month.getNewProducerEnergyCosts()) {
             Producer producer = getProducerAfterId(cost.getId());
 
@@ -200,7 +207,12 @@ public final class Game {
         return out;
     }
 
-    private void playRound() {
+    /**
+     * Method that starts the game
+     * @return the resulted state of the game when finished
+     */
+    public ObjectToWrite play() {
+//        playRound();
         payPlayers(this.consumers);
         chooseProducers(this.distributors);
         calculateContractsPrice(this.distributors);
@@ -208,14 +220,6 @@ public final class Game {
         payTaxes(this.consumers);
         payTaxes(this.distributors);
         removeBankruptContracts(this.consumers);
-    }
-
-    /**
-     * Method that starts the game
-     * @return the resulted state of the game when finished
-     */
-    public ObjectToWrite play() {
-        playRound();
 
         for (int i = 0; i < numOfTurns; i++) {
             if (isGameFinished()) {
@@ -223,7 +227,15 @@ public final class Game {
             }
 
             update(this.updates.get(i));
-            playRound();
+            payPlayers(this.consumers);
+            calculateContractsPrice(this.distributors);
+            signBestContracts(this.consumers);
+            payTaxes(this.consumers);
+            payTaxes(this.distributors);
+            updateProducers(this.updates.get(i));
+            chooseProducers(this.distributors);
+            makeProducersMonthStats(this.producers);
+            removeBankruptContracts(this.consumers);
         }
 
         List<ConsumerToWrite> consumersOut = createConsumersOut(this.consumers);
@@ -246,5 +258,19 @@ public final class Game {
 
     public static int getNumOfDistributorsInGame() {
         return numOfDistributorsInGame;
+    }
+
+    private void print() {
+        for (Consumer consumer : this.consumers) {
+            System.out.println(consumer);
+        }
+
+        for (Distributor distributor : this.distributors) {
+            System.out.println(distributor);
+        }
+
+        for (Producer producer : this.producers) {
+            System.out.println(producer);
+        }
     }
 }

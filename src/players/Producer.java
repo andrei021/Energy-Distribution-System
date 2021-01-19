@@ -4,6 +4,7 @@ import game.Cost;
 import game.MonthStats;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public final class Producer extends Player {
@@ -31,10 +32,12 @@ public final class Producer extends Player {
     }
 
     public void addDistributor(Distributor distributor) {
+        this.addObserver(distributor);
         this.distributors.add(distributor);
     }
 
     public void removeDistributor(Distributor distributor) {
+        this.deleteObserver(distributor);
         this.distributors.remove(distributor);
     }
 
@@ -44,6 +47,8 @@ public final class Producer extends Player {
         for (Distributor distributor : this.distributors) {
             currentMonth.addDistributorId(distributor.getId());
         }
+
+        Collections.sort(currentMonth.getDistributorsIds());
     }
 
     public boolean hasVacantPlace() {
@@ -99,5 +104,15 @@ public final class Producer extends Player {
 
     public List<MonthStats> getMonthlyStats() {
         return monthlyStats;
+    }
+
+    @Override
+    public String toString() {
+        return "producer id: " + super.getId()
+                + "\n maxDistributors: " + this.maxDistributors
+                + "\n priceKW: " + this.priceKW
+                + "\n energyType: " + this.energyType
+                + "\n energyPerDistributor: " + this.energyPerDistributor
+                + "\n monthlyStats: " + this.monthlyStats;
     }
 }

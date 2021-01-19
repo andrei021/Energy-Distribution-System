@@ -24,4 +24,12 @@ public class MonthStats {
     public List<Integer> getDistributorsIds() {
         return distributorsIds;
     }
+
+    @Override
+    public String toString() {
+        return "MonthStats{" +
+                "month=" + month +
+                ", distributorsIds=" + distributorsIds +
+                '}' + "\n";
+    }
 }

@@ -41,17 +41,16 @@ public final class Distributor extends Player implements Observer {
         return (int) Math.round(Math.floor(0.2 * this.cost.getProductionCost()));
     }
 
-    public void chooseProducers(EnergyStrategy strategy) {
+    public void chooseProducers(final EnergyStrategy strategy) {
         if (strategy.getName().equals(this.producerStrategy)) {
             strategy.chooseProducers(this);
         }
     }
 
-    public void addProducer(Producer producer) {
+    public void addProducer(final Producer producer) {
         this.currentEnergy += producer.getEnergyPerDistributor();
         this.producers.add(producer);
         producer.addDistributor(this);
-        producer.addObserver(this);
     }
 
     public boolean hasEnoughEnergy() {
@@ -64,12 +63,18 @@ public final class Distributor extends Player implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        o.deleteObserver(this);
-        ((Producer) o).removeDistributor(this);
+        this.hasToChooseProducers = true;
+    }
+
+    public void clearProducers() {
+        for (Producer producer : this. producers) {
+            producer.removeDistributor(this);
+        }
+
         this.producers.clear();
         this.cost.setProductionCost(0);
         this.currentEnergy = 0;
-        this.hasToChooseProducers = true;
+        this.hasToChooseProducers = false;
     }
 
     @Override
@@ -84,6 +89,10 @@ public final class Distributor extends Player implements Observer {
 
             if (Game.getNumOfDistributorsInGame() == 0) {
                 return;
+            }
+
+            for (Producer producer : this.producers) {
+                producer.removeDistributor(this);
             }
 
             for (Contract contract : this.contracts) {
@@ -107,11 +116,7 @@ public final class Distributor extends Player implements Observer {
             return;
         }
 
-        double sum = 0.0;
-        for (Producer producer : this.producers) {
-            sum += producer.getEnergyPerDistributor() * producer.getPriceKW();
-        }
-        this.cost.setProductionCost((int) Math.round(Math.floor(sum / 10)));
+        updatePorudctionCost();
 
         if (this.contracts.isEmpty()) {
             this.price = this.cost.getTotalCost() + calculateProfit();
@@ -122,6 +127,14 @@ public final class Distributor extends Player implements Observer {
                 (double) this.cost.getInfrastructureCost() / this.contracts.size())
                 + this.cost.getProductionCost()
                 + calculateProfit());
+    }
+
+    public void updatePorudctionCost() {
+        double sum = 0.0;
+        for (Producer producer : this.producers) {
+            sum += producer.getEnergyPerDistributor() * producer.getPriceKW();
+        }
+        this.cost.setProductionCost((int) Math.round(Math.floor(sum / 10)));
     }
 
     /**
@@ -181,5 +194,14 @@ public final class Distributor extends Player implements Observer {
         this.hasToChooseProducers = hasToChooseProducers;
     }
 
-
+    @Override
+    public String toString() {
+        return "distributor id: " + this.getId()
+                + "\n energyNeededKW:" + this.energyNeededKW
+                + "\n contractCost: " + this.price
+                + "\n budget: " + this.getBudget()
+                + "\n producerStrategy: " + this.producerStrategy
+                + "\n isBankrupt: " + this.isBankrupt()
+                + "\n contracts: " + this.contracts;
+    }
 }

@@ -113,4 +113,11 @@ public final class Consumer extends Player {
     public Contract getCurrentContract() {
         return currentContract;
     }
+
+    @Override
+    public String toString() {
+        return "consumer id: " + this.getId()
+                + "\n isBankrupt:" + super.isBankrupt()
+                + "\n budget: " + super.getBudget();
+    }
 }

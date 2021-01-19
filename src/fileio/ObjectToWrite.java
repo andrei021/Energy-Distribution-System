@@ -1,21 +1,19 @@
 package fileio;
 
-import players.Producer;
-
 import java.util.List;
 
 public final class ObjectToWrite {
 
     private List<ConsumerToWrite> consumers;
     private List<DistributorToWrite> distributors;
-    private List<ProducerToWrite> producers;
+    private List<ProducerToWrite> energyProducers;
 
     public ObjectToWrite(final List<ConsumerToWrite> consumers,
                          final List<DistributorToWrite> distributors,
-                         final List<ProducerToWrite> producers) {
+                         final List<ProducerToWrite> energyProducers) {
         this.consumers = consumers;
         this.distributors = distributors;
-        this.producers = producers;
+        this.energyProducers = energyProducers;
     }
 
     public List<ConsumerToWrite> getConsumers() {
@@ -26,7 +24,7 @@ public final class ObjectToWrite {
         return distributors;
     }
 
-    public List<ProducerToWrite> getProducers() {
-        return producers;
+    public List<ProducerToWrite> getEnergyProducers() {
+        return energyProducers;
     }
 }
