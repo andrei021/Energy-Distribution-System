@@ -4,24 +4,22 @@ import common.Comparators;
 import players.Distributor;
 import players.Producer;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class GreenStrategy implements Strategy {
+public class GreenStrategy extends EnergyStrategy {
 
-    private ArrayList<Producer> greenProducers;
+    public GreenStrategy(final String name, final List<Producer> producers) {
+        super(name, producers);
 
-    public GreenStrategy(final List<Producer> producers) {
-        this.greenProducers = new ArrayList<>(producers);
         Collections.sort(
-                this.greenProducers,
+                super.getProducers(),
                 Comparators.getInstance().getGREEN());
     }
 
     @Override
     public void chooseProducers(final Distributor distributor) {
-        for (Producer currentProducer : this.greenProducers) {
+        for (Producer currentProducer : super.getProducers()) {
             if (distributor.hasEnoughEnergy()) {
                 distributor.setHasToChooseProducers(false);
                 return;

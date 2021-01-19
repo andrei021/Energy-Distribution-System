@@ -15,7 +15,7 @@ public final class MonthUpdate {
     public MonthUpdate() {
         this.newConsumers = new ArrayList<>();
         this.newDistributorCosts = new ArrayList<>();
-        this.newDistributorCosts = new ArrayList<>();
+        this.newProducerEnergyCosts = new ArrayList<>();
     }
 
     /**

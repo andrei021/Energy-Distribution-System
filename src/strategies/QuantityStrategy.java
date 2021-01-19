@@ -4,24 +4,22 @@ import common.Comparators;
 import players.Distributor;
 import players.Producer;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public final class QuantityStrategy implements Strategy {
+public final class QuantityStrategy extends EnergyStrategy {
 
-    private ArrayList<Producer> quanityProducers;
+    public QuantityStrategy(final String name, final List<Producer> producers) {
+        super(name, producers);
 
-    public QuantityStrategy(final List<Producer> producers) {
-        this.quanityProducers = new ArrayList<>(producers);
         Collections.sort(
-                this.quanityProducers,
+                super.getProducers(),
                 Comparators.getInstance().getQUANTITY());
     }
 
     @Override
     public void chooseProducers(final Distributor distributor) {
-        for (Producer currentProducer : this.quanityProducers) {
+        for (Producer currentProducer : super.getProducers()) {
             if (distributor.hasEnoughEnergy()) {
                 distributor.setHasToChooseProducers(false);
                 return;

@@ -3,6 +3,7 @@ package players;
 import game.Contract;
 import game.Cost;
 import game.Game;
+import strategies.EnergyStrategy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ public final class Distributor extends Player implements Observer {
     private int currentEnergy;
     private final String producerStrategy;
     private boolean hasToChooseProducers;
+    private List<Producer> producers;
 
     public Distributor(final int id, final int budget, final int contractLength,
                        final Cost cost, final int energyNeededKW, final String producerStrategy) {
@@ -32,16 +34,23 @@ public final class Distributor extends Player implements Observer {
         this.currentEnergy = 0;
         this.producerStrategy = producerStrategy;
         this.hasToChooseProducers = true;
+        this.producers = new ArrayList<>();
     }
 
     private int calculateProfit() {
         return (int) Math.round(Math.floor(0.2 * this.cost.getProductionCost()));
     }
 
+    public void chooseProducers(EnergyStrategy strategy) {
+        if (strategy.getName().equals(this.producerStrategy)) {
+            strategy.chooseProducers(this);
+        }
+    }
+
     public void addProducer(Producer producer) {
         this.currentEnergy += producer.getEnergyPerDistributor();
-        this.cost.addToProductionCost(
-                (int) (producer.getEnergyPerDistributor() * producer.getPriceKW()));
+        this.producers.add(producer);
+        producer.addDistributor(this);
         producer.addObserver(this);
     }
 
@@ -56,6 +65,8 @@ public final class Distributor extends Player implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         o.deleteObserver(this);
+        ((Producer) o).removeDistributor(this);
+        this.producers.clear();
         this.cost.setProductionCost(0);
         this.currentEnergy = 0;
         this.hasToChooseProducers = true;
@@ -96,8 +107,11 @@ public final class Distributor extends Player implements Observer {
             return;
         }
 
-        this.cost.setProductionCost(
-                (int) Math.round(Math.floor((this.cost.getProductionCost() / 10))));
+        double sum = 0.0;
+        for (Producer producer : this.producers) {
+            sum += producer.getEnergyPerDistributor() * producer.getPriceKW();
+        }
+        this.cost.setProductionCost((int) Math.round(Math.floor(sum / 10)));
 
         if (this.contracts.isEmpty()) {
             this.price = this.cost.getTotalCost() + calculateProfit();

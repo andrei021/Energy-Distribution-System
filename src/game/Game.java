@@ -3,14 +3,15 @@ package game;
 import fileio.ConsumerToWrite;
 import fileio.DistributorToWrite;
 import fileio.ObjectToWrite;
+import fileio.ProducerToWrite;
 import players.Consumer;
 import players.Distributor;
 import players.Player;
 import players.Producer;
+import strategies.EnergyStrategy;
 import strategies.GreenStrategy;
 import strategies.PriceStrategy;
 import strategies.QuantityStrategy;
-import strategies.Strategy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +23,9 @@ public final class Game {
     private final List<Distributor> distributors;
     private final List<Producer> producers;
     private final List<MonthUpdate> updates;
-    private final Strategy greenStrategy;
-    private final Strategy priceStrategy;
-    private final Strategy quantityStrategy;
+    private final EnergyStrategy greenStrategy;
+    private final EnergyStrategy priceStrategy;
+    private final EnergyStrategy quantityStrategy;
     private static int numOfDistributorsInGame;
 
     public Game(final int numOfTurns, final List<Consumer> consumers,
@@ -35,9 +36,9 @@ public final class Game {
         this.distributors = distributors;
         this.producers = producers;
         this.updates = updates;
-        this.greenStrategy = new GreenStrategy(this.producers);
-        this.priceStrategy = new PriceStrategy(this.producers);
-        this.quantityStrategy = new QuantityStrategy(this.producers);
+        this.greenStrategy = new GreenStrategy("GREEN", this.producers);
+        this.priceStrategy = new PriceStrategy("PRICE", this.producers);
+        this.quantityStrategy = new QuantityStrategy("QUANTITY", this.producers);
         setNumOfDistributorsInGame(distributors.size());
     }
 
@@ -66,16 +67,20 @@ public final class Game {
     }
 
     private void chooseProducers(final List<Distributor> distributors) {
+        for (Producer producer : this.producers) {
+            producer.addNewMonth();
+        }
+
         for (Distributor distributor : distributors) {
-            if (distributor.hasToChooseProducers()) {
-                if (distributor.getStrategy().equals("GREEN")) {
-                    this.greenStrategy.chooseProducers(distributor);
-                } else if (distributor.getStrategy().equals("PRICE")) {
-                    this.priceStrategy.chooseProducers(distributor);
-                } else {
-                    this.quantityStrategy.chooseProducers(distributor);
-                }
+            if (!distributor.isBankrupt() && distributor.hasToChooseProducers()) {
+                distributor.chooseProducers(this.greenStrategy);
+                distributor.chooseProducers(this.priceStrategy);
+                distributor.chooseProducers(this.quantityStrategy);
             }
+        }
+
+        for (Producer producer : this.producers) {
+            producer.makeMonthStats();
         }
     }
 
@@ -166,9 +171,30 @@ public final class Game {
         for (Distributor distributor : distributorsList) {
             out.add(new DistributorToWrite(
                     distributor.getId(),
+                    distributor.getEnergyNeededKW(),
+                    distributor.getPrice(),
                     distributor.getBudget(),
+                    distributor.getStrategy(),
                     distributor.isBankrupt(),
                     distributor.getContracts()));
+        }
+
+        return out;
+    }
+
+    private List<ProducerToWrite> createProducersOut(
+            final List<Producer> producersList) {
+
+        List<ProducerToWrite> out = new ArrayList<>();
+
+        for (Producer producer : producersList) {
+            out.add(new ProducerToWrite(
+                    producer.getId(),
+                    producer.getMaxDistributors(),
+                    producer.getPriceKW(),
+                    producer.getEnergyType(),
+                    producer.getEnergyPerDistributor(),
+                    producer.getMonthlyStats()));
         }
 
         return out;
@@ -202,8 +228,9 @@ public final class Game {
 
         List<ConsumerToWrite> consumersOut = createConsumersOut(this.consumers);
         List<DistributorToWrite> distributorsOut = createDistributorsOut(this.distributors);
+        List<ProducerToWrite> producersOut = createProducersOut(this.producers);
 
-        return new ObjectToWrite(consumersOut, distributorsOut);
+        return new ObjectToWrite(consumersOut, distributorsOut, producersOut);
     }
 
     public static void setNumOfDistributorsInGame(final int numOfDistributorsInGame) {
