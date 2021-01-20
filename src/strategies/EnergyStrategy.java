@@ -16,13 +16,17 @@ public abstract class EnergyStrategy {
         this.producers = new ArrayList<>(producers);
     }
 
+    /**
+     * Every concrete energy strategy that extends this class has to implement
+     * its way of choosing producers for the distributor given as param
+     */
     public abstract void chooseProducers(Distributor distributor);
 
-    public String getName() {
+    public final String getName() {
         return name;
     }
 
-    public List<Producer> getProducers() {
+    public final List<Producer> getProducers() {
         return producers;
     }
 }

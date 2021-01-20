@@ -3,7 +3,7 @@ package game;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MonthStats {
+public final class MonthStats {
 
     private int month;
     private List<Integer> distributorsIds;
@@ -13,6 +13,9 @@ public class MonthStats {
         this.distributorsIds = new ArrayList<>();
     }
 
+    /**
+     * Adds an id to this month list of distributors id
+     */
     public void addDistributorId(int id) {
         this.distributorsIds.add(id);
     }
@@ -27,9 +30,12 @@ public class MonthStats {
 
     @Override
     public String toString() {
-        return "MonthStats{" +
-                "month=" + month +
-                ", distributorsIds=" + distributorsIds +
-                '}' + "\n";
+        return "MonthStats{"
+                + "month="
+                + month
+                + ", distributorsIds="
+                + distributorsIds
+                + '}'
+                + "\n";
     }
 }

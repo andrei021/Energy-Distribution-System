@@ -35,6 +35,10 @@ public final class Cost {
         this.productionCost = productionCost;
     }
 
+    /**
+     * Adds the number as given param to the current value of
+     * productionCost
+     */
     public void addToProductionCost(int amount) {
         this.productionCost += amount;
     }

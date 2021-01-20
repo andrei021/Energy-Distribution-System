@@ -66,9 +66,9 @@ public final class Game {
         }
     }
 
-    private void chooseProducers(final List<Distributor> distributors) {
+    private void chooseProducers(final List<Distributor> distributorsList) {
 
-        for (Distributor distributor : distributors) {
+        for (Distributor distributor : distributorsList) {
             if (!distributor.isBankrupt() && distributor.hasToChooseProducers()) {
 
                 distributor.clearProducers();
@@ -82,8 +82,8 @@ public final class Game {
         }
     }
 
-    private void makeProducersMonthStats(final List<Producer> producers) {
-        for (Producer producer : this.producers) {
+    private void makeProducersMonthStats(final List<Producer> producersList) {
+        for (Producer producer : producersList) {
             producer.addNewMonth();
             producer.makeMonthStats();
         }

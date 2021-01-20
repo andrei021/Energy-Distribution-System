@@ -41,18 +41,29 @@ public final class Distributor extends Player implements Observer {
         return (int) Math.round(Math.floor(0.2 * this.cost.getProductionCost()));
     }
 
+    /**
+     * Method finds proper producers for this distributor based on his
+     * strategy
+     */
     public void chooseProducers(final EnergyStrategy strategy) {
         if (strategy.getName().equals(this.producerStrategy)) {
             strategy.chooseProducers(this);
         }
     }
 
+    /**
+     * Adds a producer to this distributor's list of producers
+     * Takes into account the enery that the producer provides
+     */
     public void addProducer(final Producer producer) {
         this.currentEnergy += producer.getEnergyPerDistributor();
         this.producers.add(producer);
         producer.addDistributor(this);
     }
 
+    /**
+     * Checks if this distributor needs more energy or not
+     */
     public boolean hasEnoughEnergy() {
         if (currentEnergy >= energyNeededKW) {
             return true;
@@ -66,8 +77,12 @@ public final class Distributor extends Player implements Observer {
         this.hasToChooseProducers = true;
     }
 
+    /**
+     * Removes all producers from this distributor's list after one of them
+     * changed its energyPerDistributor
+     */
     public void clearProducers() {
-        for (Producer producer : this. producers) {
+        for (Producer producer : this.producers) {
             producer.removeDistributor(this);
         }
 
@@ -129,6 +144,9 @@ public final class Distributor extends Player implements Observer {
                 + calculateProfit());
     }
 
+    /**
+     * Calculates the production cost with current data
+     */
     public void updatePorudctionCost() {
         double sum = 0.0;
         for (Producer producer : this.producers) {
@@ -186,6 +204,9 @@ public final class Distributor extends Player implements Observer {
         return currentEnergy;
     }
 
+    /**
+     * @return true if this distributor has to choose new producers
+     */
     public boolean hasToChooseProducers() {
         return hasToChooseProducers;
     }

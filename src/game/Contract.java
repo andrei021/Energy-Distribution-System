@@ -38,10 +38,11 @@ public final class Contract {
 
     @Override
     public String toString() {
-        return "Contract{" +
-                "consumerId=" + consumerId +
-                ", price=" + price +
-                ", remainedContractMonths=" + remainedContractMonths +
-                '}' + "\n";
+        return "Contract{"
+                + "consumerId=" + consumerId
+                + ", price=" + price
+                + ", remainedContractMonths="
+                + remainedContractMonths + '}'
+                + "\n";
     }
 }

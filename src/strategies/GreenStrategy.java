@@ -7,7 +7,7 @@ import players.Producer;
 import java.util.Collections;
 import java.util.List;
 
-public class GreenStrategy extends EnergyStrategy {
+public final class GreenStrategy extends EnergyStrategy {
 
     public GreenStrategy(final String name, final List<Producer> producers) {
         super(name, producers);

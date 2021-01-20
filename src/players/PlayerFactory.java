@@ -25,6 +25,9 @@ public final class PlayerFactory {
         return new Distributor(id, budget, contractLength, cost, energyNeededKW, producerStrategy);
     }
 
+    /**
+     * @return a Producer instance
+     */
     public Producer createProducer(final int id, final String energyType, final int maxDistributors,
                                    final double priceKW, final int energyPerDistributors) {
         return new Producer(id, energyType, maxDistributors, priceKW, energyPerDistributors);

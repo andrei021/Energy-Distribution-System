@@ -27,20 +27,34 @@ public final class Producer extends Player {
         this.distributors = new ArrayList<>();
     }
 
+    /**
+     * Adds a new month that corresponds to current round of the game to
+     * monthlyStats
+     */
     public void addNewMonth() {
         this.monthlyStats.add(new MonthStats(this.monthlyStats.size() + 1));
     }
 
+    /**
+     * Adds a distributor to the list and marks it as an observer
+     */
     public void addDistributor(Distributor distributor) {
         this.addObserver(distributor);
         this.distributors.add(distributor);
     }
 
+    /**
+     * Removes the distributor from its lists (distributors and observers)
+     */
     public void removeDistributor(Distributor distributor) {
         this.deleteObserver(distributor);
         this.distributors.remove(distributor);
     }
 
+    /**
+     * Adds to the month that has just finished the distributors whom this
+     * producer supplied
+     */
     public void makeMonthStats() {
         MonthStats currentMonth = this.monthlyStats.get(this.monthlyStats.size() - 1);
 
@@ -51,6 +65,10 @@ public final class Producer extends Player {
         Collections.sort(currentMonth.getDistributorsIds());
     }
 
+    /**
+     * @return true if this producer has at least one place vacant in order to
+     * take in another distributor
+     */
     public boolean hasVacantPlace() {
         if (maxDistributors - countObservers() > 0) {
             return true;
@@ -59,6 +77,9 @@ public final class Producer extends Player {
         return false;
     }
 
+    /**
+     * @return true if this producer is GREEN
+     */
     public boolean isGreen() {
         if (energyType.equals("COAL") || energyType.equals("NUCLEAR")) {
             return false;
@@ -76,6 +97,9 @@ public final class Producer extends Player {
         return 0;
     }
 
+    /**
+     * Updates this producer's energyPerDistributor
+     */
     public void updateCost(final Cost newCost) {
         this.energyPerDistributor = newCost.getInfrastructureCost();
         setChanged();

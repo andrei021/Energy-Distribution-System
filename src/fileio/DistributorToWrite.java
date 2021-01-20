@@ -15,8 +15,8 @@ public final class DistributorToWrite {
     private final List<Contract> contracts;
 
     public DistributorToWrite(final int id, final int energyNeededKW, final int contractCost,
-                              final int budget, final String producerStrategy, final boolean isBankrupt,
-                              final List<Contract> contracts) {
+                              final int budget, final String producerStrategy,
+                              final boolean isBankrupt, final List<Contract> contracts) {
         this.id = id;
         this.energyNeededKW = energyNeededKW;
         this.contractCost = contractCost;
