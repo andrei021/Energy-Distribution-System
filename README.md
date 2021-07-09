@@ -49,7 +49,7 @@ after a number of rounds that is given.
     - Contains the base abstract class EnergyStrategy which provides the 
     signature of the method that all the concrete energy strategies must
     implement.
-    - It also contains the 3 concrete strategies which help distributers choose
+    - It also contains the 3 concrete strategies which help distributors choose
     their producers properly
 
 # Design patterns
