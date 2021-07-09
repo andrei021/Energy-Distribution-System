@@ -22,7 +22,7 @@ Consumers/distributors whose contracts ended are able to pick out from the
 renewed contracts at the end of the month.
 
 The simulation ends when all distributors/consumers run out of money or
-after a number of rounds that is given.
+after a number given of rounds run their course.
 
 # Usage of packages and classes
 ## Package fileio
