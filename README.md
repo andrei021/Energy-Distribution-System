@@ -6,7 +6,9 @@ Author: MIHAI Andrei 324CD
 
 # About
 This program simulates an Energy System Distribution composed of 3 major
-entities: Consumers, Producers, Distributors. 
+entities: Consumers, Producers, Distributors. The input was given as JSON files,
+hence I have used the Jackson library in order to parse them. The output was 
+stored in JSON files as well.
 
 Consumers have to choose the best contract they can afford from distributors 
 and pay their expenses at the end of each month. A month is considered a round.
