@@ -1,4 +1,4 @@
-# Object Oriented Programming - Energy System - project - phase 2
+# Object Oriented Programming - Energy Distribution System 
 
 January 2020
 
