@@ -14,7 +14,7 @@ Consumers have to choose the best contract they can afford from distributors
 and pay their expenses at the end of each month. A month is considered a round.
 
 Distributors need to receive an amount of energy, therefore they will pick 
-out the best contracts offerred by producers based on a specific strategy.
+out from the contracts offerred by producers based on a specific strategy.
 
 Distributors and Producers may recalculate their infrastructure costs and 
 change the price of their contracts based on the number of current clients. 
