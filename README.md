@@ -17,7 +17,7 @@ out the best contracts offerred by producers based on a specific strategy.
 Distributors and Producers may recalculate their infrastructure costs and 
 change the price of their contracts based on the number of current clients. 
 Consumers/distributors whose contracts ended are able to pick out from the 
-renewed contracts at the end of the month
+renewed contracts at the end of the month.
 
 The simulation ends when all distributors/consumers run out of money or
 after a number of rounds that is given.
