@@ -19,7 +19,7 @@ change the price of their contracts based on the number of current clients.
 Consumers/distributors whose contracts ended are able to pick out from the 
 renewed contracts at the end of the month
 
-    The simulation ends when all distributors/consumers run out of money or
+The simulation ends when all distributors/consumers run out of money or
 after a number of rounds that is given.
 
 # Usage of packages and classes
