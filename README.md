@@ -5,7 +5,7 @@ January 2020
 Author: MIHAI Andrei 324CD
 
 # About
-This program simulates an Energy System Distribution composed of 3 major
+This program simulates an Energy Distribution System composed of 3 major
 entities: Consumers, Producers, Distributors. The input was given as JSON files,
 hence I have used the Jackson library in order to parse them. The output was 
 stored in JSON files as well.
