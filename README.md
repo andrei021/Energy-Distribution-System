@@ -5,16 +5,16 @@ January 2020
 Author: MIHAI Andrei 324CD
 
 # About
-    This program simulates an Energy System Distribution composed of 3 major
+This program simulates an Energy System Distribution composed of 3 major
 entities: Consumers, Producers, Distributors. 
 
-    Consumers have to choose the best contract they can afford from distributors 
+Consumers have to choose the best contract they can afford from distributors 
 and pay their expenses at the end of each month. A month is considered a round.
 
-    Distributors need to receive an amount of energy, therefore they will pick 
+Distributors need to receive an amount of energy, therefore they will pick 
 out the best contracts offerred by producers based on a specific strategy.
 
-    Distributors and Producers may recalculate their infrastructure costs and 
+Distributors and Producers may recalculate their infrastructure costs and 
 change the price of their contracts based on the number of current clients. 
 Consumers/distributors whose contracts ended are able to pick out from the 
 renewed contracts at the end of the month
